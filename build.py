@@ -297,7 +297,10 @@ if condition:
 else:
     print("Condition is False")"""
 
-nums= [1, 2, 3, 4, 5]
+#loops
+#for loop
+
+"""nums= [1, 2, 3, 4, 5]
 for num in nums:
     print(num) #prints each number in the list
 
@@ -322,7 +325,117 @@ for club in clubs:
         print(club, letter) #prints each club with each letter in 'abcd'
 
  
+for i in range(5): #prints numbers from 0 to 4
+    print(i)
 
-async def add_two_numbers(a,b):
-    return (f"the sum of the following numbers are {a+b}")
+for i in range(1, 6): #prints numbers from 1 to 5
+    print(i)"""
 
+#while loop
+
+"""i = 0
+while i < 5:
+    print(i) #prints numbers from 0 to 4
+    i += 1 #increments i by 1
+
+j = 0
+while j < 5:
+    if j == 3:
+        print("Found 3!") #prints when j is 3
+        break #breaks the loop when j is 3
+    print(j) #prints each number in the list until 3
+    j += 1 #increments j by 1
+
+k=0
+while k < 5:
+    if k == 3:
+        print("Found 3!") #prints when k is 3
+        continue #skips the rest of the loop when k is 3 and will trigger an infinite loop since k is not incremented
+    print(k) #prints each number in the list until 3
+    k += 1 #increments k by 1
+
+l= 0
+while True:
+    print(l) #prints numbers from 0 to 4
+    l += 1   #increments l by 1 #infinite loop since the condition is always True
+    if l >= 5:
+        break #breaks the loop when l is 5 and prevents an infinite loop"""
+
+#functions
+
+"""def hello():
+    pass #does nothing, placeholder for future code
+print(hello) #prints the function object
+print(hello()) #calling the function with return value none 
+
+def hello_func():
+    print('hello function!')
+
+#hello_func()
+
+print('hello function!')
+print('hello function!')
+print('hello function!')
+print('hello function!')
+
+def hello():
+    print('hello world!')
+
+hello()
+hello()
+hello()
+hello()
+hello()
+
+def hilol():
+    return'hi lol! 
+print(hilol()) 
+print(hilol().upper())
+
+def daddychill(calmdown):
+    return '{}' .format(calmdown)
+print(daddychill('daddy calm down'))
+
+def hey_sexy(greeting, name='baby'):
+    return '{}, {}'.format(greeting,name)
+print(hey_sexy('hello'))
+
+def hey(greeting, name='baby'):
+    return '{}, {}'.format(greeting,name)
+print(hey('hello', name='darling'))
+
+def student_info(*args, **kwargs):
+    print(args)
+    print(kwargs)
+
+student_info('Blockchain', 'NSC', name='Vyas', age=20)
+
+def cricketers_info(*args, **kwargs):
+    print(args)
+    print(kwargs)
+
+format= ['ODI','Test']
+info = {'name':'virat','age':35}
+
+cricketers_info(*format, **info)
+
+month_days=[0,31,28,31,30,31,30,31,31,30,31,30,31]
+
+def is_leap(year):
+    #return True for leap years, false for non-leap years 
+    return year % 4 == 0 and (year % 100 != 0 or year%400 == 0)
+
+def days_in_month(year, month):
+    #return number of days in that month in that year
+
+    if not 1 <= month <= 12:
+        return'Invalid Month'
+
+    if month == 2 and is_leap(year):
+        return 29
+
+    return month_days[month]
+
+print(is_leap(2019))
+print(days_in_month(2016,2))"""
+        
