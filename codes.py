@@ -255,11 +255,17 @@ for name, hero in zip(names, heros):
      my_dict[name] = hero
 print (my_dict)
 
-my_dict = {name:hero for name, hero in zip (names, heros) if name != 'Peter'}
+my_dict = {name:hero for name, hero in zip (names, heros)}
 print(my_dict)
 
 
 # If name not equal to Peter
+my_dict = {name:hero for name, hero in zip (names, heros) if name != 'Peter'}
+print(my_dict)
+
+
+#set comprehensions
+
 
 nums = [1,1,2,1,3,4,3,4,5,5,6,7,8,7,9,9]
 my_set = set()
