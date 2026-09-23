@@ -99,7 +99,3 @@ with open ('names.csv', 'r') as csv_file:
                  for line in csv_reader:
                         del line['email']   # deleted email of each line 
                         csv_writer.writerow(line)
-
-
-    
-            
