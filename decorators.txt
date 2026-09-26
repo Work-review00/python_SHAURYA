@@ -1,0 +1,1088 @@
+1. First: What problem do decorators solve?
+
+Suppose you have a function:
+
+def greet():
+    print("Hello!")
+
+You want to add something before and after greet():
+
+Before function
+     ↓
+   greet()
+     ↓
+After function
+
+You could modify greet() itself:
+
+def greet():
+    print("Before")
+    print("Hello!")
+    print("After")
+
+But what if you have 100 functions and want the same behavior around all of them?
+
+That's where decorators come in.
+
+2. The basic idea
+
+A decorator is a function that takes another function, adds some behavior to it, and returns a new function.
+
+Think:
+
+           function
+              ↓
+         ┌───────────┐
+         │ decorator │
+         └───────────┘
+              ↓
+       modified function
+3. Before decorators, understand this
+
+Python allows you to store a function in a variable.
+
+def greet():
+    print("Hello")
+
+
+x = greet
+
+x()
+
+Output:
+
+Hello
+
+Notice:
+
+x = greet
+
+NOT:
+
+x = greet()
+
+Why?
+
+greet means:
+
+"Here is the function."
+
+greet() means:
+
+"Execute the function."
+
+This is very important for decorators.
+
+4. Functions can be passed to other functions
+
+For example:
+
+def greet():
+    print("Hello")
+
+
+def execute(func):
+    func()
+
+
+execute(greet)
+
+Output:
+
+Hello
+
+Here:
+
+execute(greet)
+
+we passed greet into execute.
+
+So functions can behave like normal values.
+
+5. Now let's build a decorator ourselves
+
+Start with:
+
+def decorator(func):
+
+    def wrapper():
+        print("Before the function")
+
+        func()
+
+        print("After the function")
+
+    return wrapper
+
+Don't worry about the name wrapper yet.
+
+Now:
+
+def greet():
+    print("Hello")
+
+We can manually decorate it:
+
+greet = decorator(greet)
+
+Then:
+
+greet()
+
+Output:
+
+Before the function
+Hello
+After the function
+What happened?
+
+Originally:
+
+greet
+ ↓
+Hello
+
+After:
+
+greet
+ ↓
+wrapper
+ ↓
+Before
+ ↓
+original greet()
+ ↓
+Hello
+ ↓
+After
+
+That's the core idea of a decorator.
+
+6. The @ syntax
+
+Python gives us a cleaner way to write this.
+
+Instead of:
+
+def greet():
+    print("Hello")
+
+greet = decorator(greet)
+
+we write:
+
+@decorator
+def greet():
+    print("Hello")
+
+Then:
+
+greet()
+
+Output:
+
+Before the function
+Hello
+After the function
+
+So:
+
+@decorator
+def greet():
+    print("Hello")
+
+is essentially equivalent to:
+
+def greet():
+    print("Hello")
+
+greet = decorator(greet)
+
+This is the most important thing to understand about @decorator.
+
+7. Why do we call it a wrapper?
+
+Look at this:
+
+def decorator(func):
+
+    def wrapper():
+        print("Before")
+
+        func()
+
+        print("After")
+
+    return wrapper
+
+wrapper() is literally wrapping the original function:
+
+        wrapper()
+     ┌───────────────┐
+     │    Before     │
+     │               │
+     │   func()      │
+     │               │
+     │     After     │
+     └───────────────┘
+8. Real example: timing a function
+
+This connects nicely with what you were just learning about time.perf_counter().
+
+Suppose:
+
+def calculate():
+    for i in range(1000000):
+        pass
+
+We want to know how long it takes.
+
+Without a decorator:
+
+import time
+
+def calculate():
+    for i in range(1000000):
+        pass
+
+
+start = time.perf_counter()
+
+calculate()
+
+end = time.perf_counter()
+
+print(end - start)
+
+But imagine doing this for 50 functions.
+
+Instead, create a decorator:
+
+import time
+
+def timer(func):
+
+    def wrapper():
+        start = time.perf_counter()
+
+        func()
+
+        end = time.perf_counter()
+
+        print("Time:", end - start)
+
+    return wrapper
+
+Then:
+
+@timer
+def calculate():
+    for i in range(1000000):
+        pass
+
+Now simply:
+
+calculate()
+
+Output might be:
+
+Time: 0.0352
+
+The decorator automatically handles the timing.
+
+9. The important problem: arguments
+
+Our decorator currently works for:
+
+def greet():
+    print("Hello")
+
+But what about:
+
+def greet(name):
+    print("Hello", name)
+
+If we do:
+
+@timer
+def greet(name):
+    print("Hello", name)
+
+our wrapper:
+
+def wrapper():
+
+doesn't accept name.
+
+That's a problem.
+
+10. *args and **kwargs
+
+We solve this using:
+
+def wrapper(*args, **kwargs):
+
+Now our decorator becomes:
+
+import time
+
+def timer(func):
+
+    def wrapper(*args, **kwargs):
+
+        start = time.perf_counter()
+
+        result = func(*args, **kwargs)
+
+        end = time.perf_counter()
+
+        print("Time:", end - start)
+
+        return result
+
+    return wrapper
+
+Now it can handle:
+
+@timer
+def greet(name):
+    print("Hello", name)
+
+
+greet("Boss")
+
+Output:
+
+Hello Boss
+Time: 0.00001
+11. Why *args and **kwargs?
+
+Imagine different functions:
+
+def add(a, b):
+    return a + b
+
+and:
+
+def greet(name, age):
+    print(name, age)
+
+The decorator shouldn't need to know every possible parameter.
+
+So:
+
+*args
+
+captures positional arguments:
+
+add(10, 20)
+
+and:
+
+**kwargs
+
+captures keyword arguments:
+
+greet(name="Boss", age=25)
+
+Then:
+
+func(*args, **kwargs)
+
+passes those arguments back to the original function.
+
+12. A very common decorator pattern
+
+You'll see this pattern everywhere:
+
+def decorator(func):
+
+    def wrapper(*args, **kwargs):
+
+        # before
+
+        result = func(*args, **kwargs)
+
+        # after
+
+        return result
+
+    return wrapper
+
+Understand this structure and decorators become much easier.
+
+13. Real-world uses
+
+Decorators are commonly used for things like:
+
+Timing
+@timer
+def process_data():
+    ...
+Logging
+@log
+def process_data():
+    ...
+Authentication
+@require_login
+def dashboard():
+    ...
+Permission checking
+@admin_only
+def delete_user():
+    ...
+Caching
+@cache
+def expensive_calculation():
+    ...
+
+And you've already encountered decorators indirectly if you're learning FastAPI.
+
+For example:
+
+@app.get("/users")
+def get_users():
+    return {"users": []}
+
+That:
+
+@app.get("/users")
+
+is decorator syntax.
+
+FastAPI uses decorators to associate your Python function with a particular HTTP route.
+
+So learning decorators will directly help you understand FastAPI.
+
+14. The mental model
+
+Remember this:
+
+@decorator
+def function():
+    ...
+
+means:
+
+function
+   ↓
+decorator(function)
+   ↓
+new/wrapped function
+
+And when you call:
+
+function()
+
+you're actually calling the wrapped version.
+
+
+
+Decorators — Level 2
+
+We understand:
+
+@my_decorator
+def say_hello():
+    print("Hello")
+
+is essentially:
+
+say_hello = my_decorator(say_hello)
+
+Now let's handle the parts that usually confuse beginners.
+
+1. Decorators with function arguments
+
+Suppose we have:
+
+def greet(name):
+    print(f"Hello {name}")
+
+We want to decorate it.
+
+Our earlier wrapper was:
+
+def wrapper():
+
+But greet() needs name.
+
+So we use:
+
+def wrapper(*args, **kwargs):
+
+Complete example:
+
+def my_decorator(func):
+
+    def wrapper(*args, **kwargs):
+        print("Before function")
+
+        func(*args, **kwargs)
+
+        print("After function")
+
+    return wrapper
+
+Now:
+
+@my_decorator
+def greet(name):
+    print(f"Hello {name}")
+
+Calling:
+
+greet("Boss")
+
+produces:
+
+Before function
+Hello Boss
+After function
+What happened?
+
+When you call:
+
+greet("Boss")
+
+the argument "Boss" goes into:
+
+*args
+
+Then:
+
+func(*args, **kwargs)
+
+passes it to the original function:
+
+greet("Boss")
+2. *args and **kwargs in decorators
+
+This is worth understanding properly.
+
+Suppose:
+
+def add(a, b):
+    return a + b
+
+Calling:
+
+add(10, 20)
+
+has positional arguments.
+
+They can be captured by:
+
+*args
+
+So:
+
+args = (10, 20)
+
+Notice that args becomes a tuple.
+
+Now:
+
+def introduce(name, age):
+    print(name, age)
+
+Calling:
+
+introduce(name="Boss", age=25)
+
+uses keyword arguments.
+
+These are captured by:
+
+**kwargs
+
+Conceptually:
+
+kwargs = {
+    "name": "Boss",
+    "age": 25
+}
+
+So:
+
+def wrapper(*args, **kwargs):
+
+basically means:
+
+"I don't care what arguments the original function accepts. Give me whatever arguments were passed."
+
+That's why decorators commonly use this pattern.
+
+3. Returning a value
+
+Here's a subtle problem.
+
+Suppose:
+
+def add(a, b):
+    return a + b
+
+And our decorator is:
+
+def my_decorator(func):
+
+    def wrapper(*args, **kwargs):
+        print("Running...")
+        func(*args, **kwargs)
+
+    return wrapper
+
+Now:
+
+@my_decorator
+def add(a, b):
+    return a + b
+
+If we do:
+
+result = add(10, 20)
+
+print(result)
+
+we get:
+
+Running...
+None
+
+Why?
+
+Because our wrapper didn't return the result.
+
+The original function calculated:
+
+10 + 20
+
+which is:
+
+30
+
+But we threw that value away.
+
+Correct version
+def my_decorator(func):
+
+    def wrapper(*args, **kwargs):
+        print("Running...")
+
+        result = func(*args, **kwargs)
+
+        return result
+
+    return wrapper
+
+Now:
+
+@my_decorator
+def add(a, b):
+    return a + b
+
+Then:
+
+result = add(10, 20)
+
+print(result)
+
+Output:
+
+Running...
+30
+Very important pattern
+
+You'll see this constantly:
+
+result = func(*args, **kwargs)
+return result
+
+It means:
+
+Run the original function, save what it returned, and give that value back to whoever called the decorated function.
+
+4. functools.wraps
+
+Now we reach an important professional-level concept.
+
+Consider:
+
+def my_decorator(func):
+
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    return wrapper
+
+And:
+
+@my_decorator
+def greet():
+    """Say hello to the user."""
+    print("Hello")
+
+Now:
+
+print(greet.__name__)
+
+You might expect:
+
+greet
+
+But you'll get:
+
+wrapper
+
+Why?
+
+Because after decoration:
+
+greet = my_decorator(greet)
+
+and greet now refers to:
+
+wrapper
+
+Python has essentially replaced the original function with the wrapper.
+
+Fix it with functools.wraps
+from functools import wraps
+
+
+def my_decorator(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    return wrapper
+
+Now:
+
+@my_decorator
+def greet():
+    """Say hello to the user."""
+    print("Hello")
+
+Then:
+
+print(greet.__name__)
+
+gives:
+
+greet
+
+And:
+
+print(greet.__doc__)
+
+gives:
+
+Say hello to the user.
+So remember:
+from functools import wraps
+
+and:
+
+@wraps(func)
+
+are commonly used when writing proper decorators.
+
+5. Decorator with its own argument
+
+Now things get interesting.
+
+Suppose we want:
+
+@repeat(3)
+def hello():
+    print("Hello")
+
+We want:
+
+Hello
+Hello
+Hello
+
+Notice something important:
+
+@repeat(3)
+
+has an argument.
+
+Our previous decorator:
+
+@my_decorator
+
+takes the function directly.
+
+But:
+
+@repeat(3)
+
+first needs to process 3.
+
+So we need another level of function.
+
+def repeat(times):
+
+    def decorator(func):
+
+        def wrapper(*args, **kwargs):
+
+            for _ in range(times):
+                func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+Now:
+
+@repeat(3)
+def hello():
+    print("Hello")
+
+Then:
+
+hello()
+
+Output:
+
+Hello
+Hello
+Hello
+6. Why are there three functions?
+
+This is where decorators can look scary.
+
+Look at:
+
+def repeat(times):
+
+    def decorator(func):
+
+        def wrapper(*args, **kwargs):
+
+            for _ in range(times):
+                func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+There are three levels:
+
+repeat(times)
+    ↓
+decorator(func)
+    ↓
+wrapper(*args, **kwargs)
+
+Each has a different job.
+
+Level 1
+repeat(3)
+
+Receives the decorator's configuration:
+
+times = 3
+Level 2
+decorator(func)
+
+Receives the function being decorated:
+
+func = hello
+Level 3
+wrapper()
+
+Runs when you actually call:
+
+hello()
+7. The full flow
+
+When Python sees:
+
+@repeat(3)
+def hello():
+    print("Hello")
+
+conceptually:
+
+repeat(3)
+    ↓
+returns decorator
+    ↓
+decorator(hello)
+    ↓
+returns wrapper
+    ↓
+hello = wrapper
+
+Then when you do:
+
+hello()
+
+Python actually executes:
+
+wrapper()
+
+which executes the original:
+
+hello()
+
+three times.
+
+8. Multiple decorators
+
+You can also stack decorators.
+
+For example:
+
+def decorator1(func):
+
+    def wrapper():
+        print("Decorator 1")
+        func()
+
+    return wrapper
+
+
+def decorator2(func):
+
+    def wrapper():
+        print("Decorator 2")
+        func()
+
+    return wrapper
+
+Then:
+
+@decorator1
+@decorator2
+def hello():
+    print("Hello")
+
+This is equivalent to:
+
+hello = decorator1(decorator2(hello))
+
+So the bottom decorator is applied first.
+
+Flow:
+
+hello
+ ↓
+decorator2
+ ↓
+decorator1
+ ↓
+final hello
+9. Why decorators matter for FastAPI
+
+This connects directly to what you're learning.
+
+You've seen:
+
+@app.get("/users")
+def get_users():
+    return {"users": []}
+
+That:
+
+@app.get("/users")
+
+is a decorator.
+
+Conceptually, FastAPI is doing something like:
+
+get_users = app.get("/users")(get_users)
+
+The decorator tells FastAPI:
+
+"Take this function and register it as the handler for GET /users."
+
+Then when a client requests:
+
+GET /users
+
+FastAPI knows:
+
+/users
+   ↓
+get_users()
+   ↓
+{"users": []}
+
+So decorators aren't just a Python trick. They're heavily used in frameworks.
+
+10. The decorator pattern you should memorize
+
+For now, this is the most useful template:
+
+from functools import wraps
+
+
+def decorator(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+
+        # before
+
+        result = func(*args, **kwargs)
+
+        # after
+
+        return result
+
+    return wrapper
+
+You can build:
+
+@timer
+@logger
+@authenticate
+@admin_required
+
+etc. from this basic structure.
+
+Your next exercise
+
+Try to predict the output before running this:
+
+def my_decorator(func):
+
+    def wrapper(*args, **kwargs):
+        print("A")
+
+        result = func(*args, **kwargs)
+
+        print("B")
+
+        return result
+
+    return wrapper
+
+
+@my_decorator
+def add(a, b):
+    print("C")
+    return a + b
+
+
+result = add(10, 20)
+
+print("D")
+print(result)
+
+Think through the order carefully:
+
+?
+?
+?
+?
+?
+
+The key skill now is not memorizing decorator syntax — it's being able to trace exactly what happens when @my_decorator replaces add with wrapper.
