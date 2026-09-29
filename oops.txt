@@ -1,0 +1,1355 @@
+🐍 OOP in Python
+
+OOP stands for Object-Oriented Programming.
+
+The basic idea is:
+
+Instead of writing a program only as a collection of functions, we organize it around objects that contain data + behavior.
+
+For example, think about a car.
+
+A car has:
+
+Data / properties
+
+brand
+color
+speed
+model
+
+Behavior / actions
+
+start()
+stop()
+accelerate()
+brake()
+
+In Python, we can represent that using a class.
+
+1. What is a Class?
+
+A class is a blueprint for creating objects.
+
+Think of it like a house blueprint.
+
+class Car:
+    pass
+
+Here:
+
+class Car:
+
+creates a class called Car.
+
+pass means:
+
+"Don't do anything yet."
+
+2. What is an Object?
+
+An object is an actual instance of a class.
+
+class Car:
+    pass
+
+car1 = Car()
+car2 = Car()
+
+Here:
+
+Car          → Blueprint
+ ↓
+ ├── car1    → Object
+ └── car2    → Object
+
+car1 and car2 are two different objects created from the Car class.
+
+You can check:
+
+print(car1)
+print(car2)
+
+They will be different objects in memory.
+
+3. Adding Data to Objects
+
+We can give an object properties.
+
+class Car:
+    pass
+
+car1 = Car()
+
+car1.brand = "BMW"
+car1.color = "Black"
+car1.speed = 200
+
+Now:
+
+print(car1.brand)
+print(car1.color)
+print(car1.speed)
+
+Output:
+
+BMW
+Black
+200
+
+So the object contains data:
+
+car1
+ ├── brand = BMW
+ ├── color = Black
+ └── speed = 200
+
+But there is a better way to initialize this data.
+
+That's where __init__() comes in.
+
+4. __init__() — Constructor
+
+Consider:
+
+class Car:
+
+    def __init__(self, brand, color, speed):
+        self.brand = brand
+        self.color = color
+        self.speed = speed
+
+Now:
+
+car1 = Car("BMW", "Black", 200)
+car2 = Car("Audi", "White", 180)
+
+Python automatically calls:
+
+__init__()
+
+when we create the object.
+
+So:
+
+car1 = Car("BMW", "Black", 200)
+
+roughly means:
+
+Create Car object
+       ↓
+Call __init__()
+       ↓
+brand = BMW
+color = Black
+speed = 200
+
+Then:
+
+print(car1.brand)
+
+gives:
+
+BMW
+5. What is self?
+
+This is VERY important in Python OOP.
+
+Look at:
+
+class Car:
+
+    def __init__(self, brand, color):
+        self.brand = brand
+        self.color = color
+
+What is self?
+
+self means:
+
+the current object
+
+For example:
+
+car1 = Car("BMW", "Black")
+car2 = Car("Audi", "White")
+
+When Python is dealing with car1:
+
+self → car1
+
+When Python is dealing with car2:
+
+self → car2
+
+Therefore:
+
+self.brand = brand
+
+means:
+
+Store brand inside the current object.
+
+So:
+
+car1 = Car("BMW", "Black")
+
+creates:
+
+car1
+ ├── brand = BMW
+ └── color = Black
+
+while:
+
+car2 = Car("Audi", "White")
+
+creates:
+
+car2
+ ├── brand = Audi
+ └── color = White
+6. Methods
+
+A method is a function inside a class.
+
+Example:
+
+class Car:
+
+    def __init__(self, brand, color):
+        self.brand = brand
+        self.color = color
+
+    def drive(self):
+        print(self.brand, "is driving")
+
+Create an object:
+
+car1 = Car("BMW", "Black")
+
+Call the method:
+
+car1.drive()
+
+Output:
+
+BMW is driving
+
+Why?
+
+Because:
+
+car1.drive()
+
+automatically passes car1 as self.
+
+Conceptually:
+
+Car.drive(car1)
+
+So inside:
+
+def drive(self):
+
+self refers to car1.
+
+7. Complete Example
+class Car:
+
+    def __init__(self, brand, color):
+        self.brand = brand
+        self.color = color
+
+    def drive(self):
+        print(self.brand, "is driving")
+
+    def stop(self):
+        print(self.brand, "has stopped")
+
+
+car1 = Car("BMW", "Black")
+car2 = Car("Audi", "White")
+
+print(car1.brand)
+print(car2.brand)
+
+car1.drive()
+car2.drive()
+
+car1.stop()
+car2.stop()
+
+Output:
+
+BMW
+Audi
+BMW is driving
+Audi is driving
+BMW has stopped
+Audi has stopped
+8. The Four Main Pillars of OOP
+
+Once you understand classes, objects, self, methods and __init__, we move to the famous four pillars:
+
+1. Encapsulation
+
+Keeping data and methods together and controlling access to data.
+
+2. Inheritance
+
+One class can inherit functionality from another class.
+
+Animal
+  ↓
+Dog
+3. Polymorphism
+
+Different objects can respond to the same method in different ways.
+
+dog.sound()
+cat.sound()
+
+Both have sound(), but produce different behavior.
+
+4. Abstraction
+
+Hiding unnecessary implementation details and exposing only what is needed.
+
+The learning order I'd recommend
+
+Since you're learning Python from the basics, don't jump directly into the four pillars.
+
+Learn OOP in this order:
+
+1. Class
+      ↓
+2. Object
+      ↓
+3. Attributes
+      ↓
+4. __init__()
+      ↓
+5. self
+      ↓
+6. Methods
+      ↓
+7. Class vs Instance Variables
+      ↓
+8. Instance Methods
+      ↓
+9. Class Methods
+      ↓
+10. Static Methods
+      ↓
+11. Inheritance
+      ↓
+12. Method Overriding
+      ↓
+13. super()
+      ↓
+14. Multiple Inheritance
+      ↓
+15. Encapsulation
+      ↓
+16. Name Mangling
+      ↓
+17. Polymorphism
+      ↓
+18. Abstraction
+      ↓
+19. Magic/Dunder Methods
+      ↓
+20. OOP Project
+
+
+9. Understanding self Properly
+
+Consider:
+
+class Student:
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+Now:
+
+student1 = Student("Rahul", 20)
+student2 = Student("Aman", 21)
+
+You might wonder:
+
+Why do we need self when we already have name and age?
+
+Because name and age are parameters, while self.name and self.age are attributes belonging to the object.
+
+Think about this:
+
+student1 = Student("Rahul", 20)
+
+Python effectively does something similar to:
+
+Student.__init__(student1, "Rahul", 20)
+
+Therefore inside:
+
+def __init__(self, name, age):
+
+we have:
+
+self  → student1
+name  → "Rahul"
+age   → 20
+
+Then:
+
+self.name = name
+
+means:
+
+student1.name = "Rahul"
+
+and:
+
+self.age = age
+
+means:
+
+student1.age = 20
+
+
+10. Why Can't We Just Write name = name?
+
+Suppose you wrote:
+
+class Student:
+
+    def __init__(self, name, age):
+        name = name
+        age = age
+
+This doesn't store the values in the object.
+
+The variables name and age are just local variables inside __init__().
+
+After __init__() finishes, those local variables are gone.
+
+But:
+
+self.name = name
+self.age = age
+
+stores them inside the object.
+
+That's the key difference.
+
+11. Visualizing the Object
+
+Suppose:
+
+student1 = Student("Rahul", 20)
+
+The object can be visualized as:
+
+student1
+   │
+   ├── name → "Rahul"
+   │
+   └── age  → 20
+
+And:
+
+student2 = Student("Aman", 21)
+
+creates another object:
+
+student2
+   │
+   ├── name → "Aman"
+   │
+   └── age  → 21
+
+Both objects use the same class, but each object has its own data.
+
+12. Methods Also Use self
+
+Now let's add a method:
+
+class Student:
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def introduce(self):
+        print("My name is", self.name)
+        print("I am", self.age, "years old")
+
+Create objects:
+
+student1 = Student("Rahul", 20)
+student2 = Student("Aman", 21)
+
+Call:
+
+student1.introduce()
+
+Output:
+
+My name is Rahul
+I am 20 years old
+
+And:
+
+student2.introduce()
+
+Output:
+
+My name is Aman
+I am 21 years old
+
+Why does the same method produce different results?
+
+Because self changes.
+
+student1.introduce()
+
+self → student1
+
+while:
+
+student2.introduce()
+
+self → student2
+
+
+13. self Is Not a Keyword
+
+This is an interesting Python fact.
+
+self is not technically a Python keyword.
+
+You could write:
+
+class Student:
+
+    def __init__(this, name, age):
+        this.name = name
+        this.age = age
+
+Technically this works.
+
+But don't do this.
+
+Python convention is:
+
+self
+
+So always use:
+
+def __init__(self, ...):
+
+and:
+
+self.name
+
+
+14. Instance Variables
+
+Variables created using self are generally called instance variables.
+
+Example:
+
+class Student:
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+Here:
+
+self.name
+self.age
+
+are instance variables.
+
+Why "instance"?
+
+Because each instance/object gets its own copy.
+
+student1 = Student("Rahul", 20)
+student2 = Student("Aman", 21)
+
+So:
+
+student1.name → Rahul
+student2.name → Aman
+
+They are independent.
+
+15. Class Variables
+
+Now let's introduce another important concept.
+
+A class variable belongs to the class rather than a particular object.
+
+Example:
+
+class Student:
+
+    school = "ABC School"
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+Here:
+
+school = "ABC School"
+
+is a class variable.
+
+Every object can access it:
+
+student1 = Student("Rahul", 20)
+student2 = Student("Aman", 21)
+
+print(student1.school)
+print(student2.school)
+
+Output:
+
+ABC School
+ABC School
+
+Because both students belong to the same school.
+
+16. Instance vs Class Variables
+
+This is extremely important.
+
+class Student:
+
+    school = "ABC School"       # class variable
+
+    def __init__(self, name, age):
+        self.name = name         # instance variable
+        self.age = age           # instance variable
+
+Think:
+
+             Student class
+                  │
+          school = ABC School
+                  │
+        ┌─────────┴─────────┐
+        ↓                   ↓
+    student1             student2
+    name = Rahul         name = Aman
+    age = 20             age = 21
+Instance variable
+
+Different for each object:
+
+self.name
+self.age
+Class variable
+
+Shared by the class:
+
+school
+
+
+17. Changing an Instance Variable
+student1.name = "Rohit"
+
+Now:
+
+print(student1.name)
+
+gives:
+
+Rohit
+
+But:
+
+print(student2.name)
+
+still gives:
+
+Aman
+
+Because name belongs separately to each object.
+
+18. Changing a Class Variable
+
+Suppose:
+
+class Student:
+
+    school = "ABC School"
+
+    def __init__(self, name):
+        self.name = name
+
+Then:
+
+Student.school = "XYZ School"
+
+Now:
+
+print(student1.school)
+print(student2.school)
+
+will access the changed class value, assuming neither object has its own school attribute.
+
+19. Instance Methods
+
+The methods we've been writing are called instance methods.
+
+Example:
+
+class Student:
+
+    def __init__(self, name):
+        self.name = name
+
+    def introduce(self):
+        print("My name is", self.name)
+
+The first parameter is:
+
+self
+
+because the method works with a particular object.
+
+student1.introduce()
+
+means the method operates on student1.
+
+20. Let's Build a Real Example
+
+Let's create a simple bank account.
+
+class BankAccount:
+
+    def __init__(self, owner, balance):
+        self.owner = owner
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+
+    def withdraw(self, amount):
+        self.balance -= amount
+
+    def show_balance(self):
+        print("Balance:", self.balance)
+
+Create an account:
+
+account1 = BankAccount("Rahul", 5000)
+
+Deposit:
+
+account1.deposit(2000)
+
+Now:
+
+5000 + 2000 = 7000
+
+Withdraw:
+
+account1.withdraw(1000)
+
+Now:
+
+7000 - 1000 = 6000
+
+Finally:
+
+account1.show_balance()
+
+Output:
+
+Balance: 6000
+
+
+21. What's Actually Happening?
+
+When we write:
+
+account1.deposit(2000)
+
+Python knows:
+
+self → account1
+amount → 2000
+
+So:
+
+self.balance += amount
+
+becomes conceptually:
+
+account1.balance += 2000
+
+That's the core idea behind self.
+
+22. Your Mental Model of OOP
+
+For now, remember this:
+
+CLASS
+  ↓
+Blueprint
+  ↓
+OBJECT
+  ↓
+Actual thing created from blueprint
+  ↓
+ATTRIBUTES
+  ↓
+Data belonging to object
+  ↓
+METHODS
+  ↓
+Actions object can perform
+
+For example:
+
+             Car (class)
+                 │
+       ┌─────────┴─────────┐
+       ↓                   ↓
+    car1                  car2
+ BMW / Black           Audi / White
+       │                   │
+       ├── drive()         ├── drive()
+       └── stop()          └── stop()
+
+And the next major concept is:
+
+Class
+ │
+ ├── Class Variables
+ │
+ ├── Instance Variables
+ │
+ ├── Instance Methods
+ │
+ ├── Class Methods
+ │
+ └── Static Methods
+
+
+ 21. Class Methods and Static Methods
+
+So far we've learned:
+
+Class
+Object
+__init__()
+self
+Instance variables
+Class variables
+Instance methods
+
+Now we need to understand three types of methods:
+
+                 METHODS
+                    │
+        ┌───────────┼───────────┐
+        ↓           ↓           ↓
+   Instance      Class       Static
+    Method       Method       Method
+      │            │             │
+    self         cls          neither
+22. Instance Method
+
+We've already seen this:
+
+class Student:
+
+    def __init__(self, name):
+        self.name = name
+
+    def introduce(self):
+        print("My name is", self.name)
+
+Notice:
+
+def introduce(self):
+
+It takes self.
+
+That means this method works with a specific object.
+
+student1 = Student("Rahul")
+student2 = Student("Aman")
+
+student1.introduce()
+student2.introduce()
+
+Here:
+
+student1.introduce()
+        ↓
+self = student1
+
+and:
+
+student2.introduce()
+        ↓
+self = student2
+
+So an instance method operates on an individual object.
+
+23. Class Method
+
+A class method works with the class itself rather than a particular object.
+
+We create it using:
+
+@classmethod
+
+Example:
+
+class Student:
+
+    school = "ABC School"
+
+    @classmethod
+    def change_school(cls, new_school):
+        cls.school = new_school
+
+Notice something different:
+
+def change_school(cls, new_school):
+
+Instead of:
+
+self
+
+we have:
+
+cls
+
+cls means:
+
+The current class.
+
+24. Understanding cls
+
+Suppose:
+
+class Student:
+
+    school = "ABC School"
+
+    @classmethod
+    def change_school(cls, new_school):
+        cls.school = new_school
+
+We can call:
+
+Student.change_school("XYZ School")
+
+Conceptually:
+
+cls → Student
+
+So:
+
+cls.school = new_school
+
+becomes approximately:
+
+Student.school = "XYZ School"
+
+Therefore:
+
+print(Student.school)
+
+gives:
+
+XYZ School
+
+25. Why Do We Need Class Methods?
+
+Imagine our class represents a company:
+
+class Employee:
+
+    company = "ABC Ltd"
+
+    def __init__(self, name):
+        self.name = name
+
+Every employee belongs to the same company.
+
+Suppose the company changes its name.
+
+We could do:
+
+Employee.company = "XYZ Ltd"
+
+But we could also provide a method:
+
+class Employee:
+
+    company = "ABC Ltd"
+
+    @classmethod
+    def change_company(cls, new_name):
+        cls.company = new_name
+
+Then:
+
+Employee.change_company("XYZ Ltd")
+
+Now:
+
+print(Employee.company)
+
+Output:
+
+XYZ Ltd
+
+The method operates on the class-level data.
+
+26. Instance Method vs Class Method
+
+Compare these:
+
+Instance method
+def change_name(self, new_name):
+    self.name = new_name
+
+This changes one object's data.
+
+employee1.change_name("Rahul")
+
+Only employee1 changes.
+
+Class method
+@classmethod
+def change_company(cls, new_name):
+    cls.company = new_name
+
+This changes the class-level data.
+
+Employee.change_company("XYZ Ltd")
+
+The class's company changes.
+
+27. Class Methods Can Also Be Called Through Objects
+
+You can technically do:
+
+employee1.change_company("XYZ Ltd")
+
+Python still treats it as a class method.
+
+The important point is:
+
+Instance method → self → object
+Class method    → cls  → class
+28. A Very Useful Example: Alternative Constructors
+
+This is one of the most common real uses of @classmethod.
+
+Suppose:
+
+class Person:
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+Normally:
+
+person1 = Person("Rahul", 20)
+
+But suppose the data comes as:
+
+Rahul-20
+
+We could create a class method that knows how to parse this:
+
+class Person:
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    @classmethod
+    def from_string(cls, data):
+        name, age = data.split("-")
+        return cls(name, int(age))
+
+Now:
+
+person1 = Person.from_string("Rahul-20")
+
+This creates a Person object.
+
+Let's understand:
+
+return cls(name, int(age))
+
+If:
+
+cls → Person
+
+then:
+
+cls(name, int(age))
+
+is effectively:
+
+Person(name, int(age))
+
+So it calls:
+
+__init__()
+
+and creates the object.
+
+This pattern is called an alternative constructor.
+
+29. Static Methods
+
+Now we have:
+
+@staticmethod
+
+A static method does not need self or cls.
+
+Example:
+
+class Math:
+
+    @staticmethod
+    def add(a, b):
+        return a + b
+
+Call it:
+
+print(Math.add(10, 20))
+
+Output:
+
+30
+
+Notice:
+
+def add(a, b):
+
+There is no:
+
+self
+
+and no:
+
+cls
+30. Why Does Static Method Exist?
+
+Suppose we have:
+
+class Employee:
+
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+Now imagine we want a function that checks whether a salary is valid.
+
+@staticmethod
+def is_valid_salary(salary):
+    return salary > 0
+
+Complete:
+
+class Employee:
+
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    @staticmethod
+    def is_valid_salary(salary):
+        return salary > 0
+
+Now:
+
+print(Employee.is_valid_salary(50000))
+
+Output:
+
+True
+
+The function doesn't need:
+
+self
+
+because it doesn't need a particular employee.
+
+It doesn't need:
+
+cls
+
+because it doesn't need the class either.
+
+It's simply a utility function logically related to Employee.
+
+31. The Three Methods Side-by-Side
+class Example:
+
+    class_variable = 100
+
+    def instance_method(self):
+        print(self)
+
+    @classmethod
+    def class_method(cls):
+        print(cls)
+
+    @staticmethod
+    def static_method():
+        print("Hello")
+
+Now:
+
+Instance method
+obj.instance_method()
+
+gets:
+
+self → object
+Class method
+Example.class_method()
+
+gets:
+
+cls → Example
+Static method
+Example.static_method()
+
+gets:
+
+nothing automatically
+32. Easy Mental Model
+
+Think of a company.
+
+              COMPANY
+                 │
+       ┌─────────┴─────────┐
+       │                   │
+   Class Data          Employees
+       │                   │
+   company_name        employee1
+                       employee2
+                       employee3
+Instance method
+
+"Change my salary."
+
+def change_salary(self, salary):
+    self.salary = salary
+
+Uses:
+
+self → specific employee
+Class method
+
+"Change the company's name."
+
+@classmethod
+def change_company(cls, name):
+    cls.company_name = name
+
+Uses:
+
+cls → company/class
+Static method
+
+"Is this salary valid?"
+
+@staticmethod
+def valid_salary(salary):
+    return salary > 0
+
+Needs neither employee nor company.
+
+33. One Complete Example
+class Employee:
+
+    company = "ABC Ltd"
+
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    # Instance method
+    def show_info(self):
+        print(self.name, self.salary)
+
+    # Class method
+    @classmethod
+    def change_company(cls, new_company):
+        cls.company = new_company
+
+    # Static method
+    @staticmethod
+    def is_valid_salary(salary):
+        return salary > 0
+
+Create objects:
+
+employee1 = Employee("Rahul", 50000)
+employee2 = Employee("Aman", 60000)
+
+Instance method:
+
+employee1.show_info()
+
+Class method:
+
+Employee.change_company("XYZ Ltd")
+
+Static method:
+
+print(Employee.is_valid_salary(50000))
+34. The Big Picture
+
+At this point:
+
+                 OOP
+                  │
+          ┌───────┴───────┐
+          │               │
+       Classes          Objects
+          │               │
+          │               ├── Attributes
+          │               │
+          │               └── Methods
+          │
+          ├── Class Variables
+          │
+          └── Methods
+                │
+       ┌────────┼────────┐
+       ↓        ↓        ↓
+    Instance   Class   Static
+     Method   Method   Method
+       │        │        │
+      self     cls     nothing
+
+The most important distinction to memorize:
+
+Type	Automatically receives	Works mainly with
+Instance method	self	Object
+Class method	cls	Class
+Static method	Nothing	Independent utility
